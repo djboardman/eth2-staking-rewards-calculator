@@ -68,7 +68,7 @@ def get_validator(idx: int = None, addr: str = None) -> Validator:
         if addr:
             encoded_pubkey = b64encode(codecs.decode(addr[2:], "hex"))
             resp = s.get(
-                f"http://{host}:{port}/eth/v1alpha1/validator/index",
+                f"http://{host}:{port}/eth/v1/validator/index",
                 params={"public_key": encoded_pubkey},
             )
 
@@ -81,7 +81,7 @@ def get_validator(idx: int = None, addr: str = None) -> Validator:
             return Validator(validator_index=int(data["index"]), eth2_address=addr)
         else:
             resp = s.get(
-                f"http://{host}:{port}/eth/v1alpha1/validator",
+                f"http://{host}:{port}/eth/v1/validator",
                 params={"index": idx},
             )
 
@@ -203,7 +203,7 @@ def _datapoints_prysm(slot: int, slot_datetime: datetime.datetime, validator_ind
     epoch_for_slot = math.floor(slot / SLOTS_IN_EPOCH)
 
     resp = s.get(
-        f"http://{host}:{port}/eth/v1alpha1/validators/balances",
+        f"http://{host}:{port}/eth/v1/validators/balances",
         params={"epoch": epoch_for_slot, "indices": [validator_indexes]},
     )
 
@@ -217,7 +217,7 @@ def _datapoints_prysm(slot: int, slot_datetime: datetime.datetime, validator_ind
             if len(validator_indexes) == 0:
                 return []
             resp = s.get(
-                f"http://{host}:{port}/eth/v1alpha1/validators/balances",
+                f"http://{host}:{port}/eth/v1/validators/balances",
                 params={"epoch": epoch_for_slot, "indices": [validator_indexes]},
             )
         else:
@@ -244,7 +244,7 @@ def _datapoints_prysm(slot: int, slot_datetime: datetime.datetime, validator_ind
 
     while data["nextPageToken"] != "":
         resp = s.get(
-            f"http://{host}:{port}/eth/v1alpha1/validators/balances",
+            f"http://{host}:{port}/eth/v1/validators/balances",
             params={
                 "epoch": epoch_for_slot,
                 "indices": [validator_indexes],
@@ -262,7 +262,7 @@ def _datapoints_prysm(slot: int, slot_datetime: datetime.datetime, validator_ind
                 if len(validator_indexes) == 0:
                     return []
                 resp = s.get(
-                    f"http://{host}:{port}/eth/v1alpha1/validators/balances",
+                    f"http://{host}:{port}/eth/v1/validators/balances",
                     params={"epoch": epoch_for_slot, "indices": [validator_indexes]},
                 )
             else:
